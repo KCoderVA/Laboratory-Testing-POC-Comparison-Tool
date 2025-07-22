@@ -43,9 +43,32 @@ xArchive*
 *.tmp
 ~$*
 
-# PowerBI temporary files
+# =============================================================================
+# POWERBI FILES (Security - Template Available by VA Request Only)
+# =============================================================================
+# PowerBI files contain potential sensitive/cached data
+# Template available through secure VA channels only
+*.pbix
+*.pbit
+*.pbids
+*.pbiproj
+Laboratory Testing POC Comparison.pbix
+**/Laboratory Testing POC Comparison.pbix
+**/PowerBI Published Report.url
+
+# PowerBI temporary and cache files
 *.pbix.tmp
 *.pbit.tmp
+*.pbix.bak
+*.pbit.bak
+**/AnalysisServicesWorkspaces/**
+**/PowerBI/**
+
+# PowerBI service and sharing files
+*.rdl
+*.rds
+*.pbip
+*.json.tmp
 
 # Excel temporary files  
 ~*.xlsx

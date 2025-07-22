@@ -2,7 +2,12 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![SQL Server](https://img.shields.io/badge/SQL%20Server-2016+-blue.svg)](https://www.microsoft.com/en-us/sql-server)
-[![PowerBI](https://img.shields.io/badge/PowerBI-Compatible-orange.svg)](https://powerbi.microsoft.com/)
+[![PowerBI](https://img.shields.io/badge/PowerBI-Available%20by%20Request-orange.svg)](mailto:Kyle.Coder@va.gov)
+
+> **📧 PowerBI Template Available by Request Only**  
+> For security compliance, the PowerBI template (.pbix) is distributed through secure VA channels only.  
+> **VA users**: Email Kyle.Coder@va.gov to request template after deploying SQL components.  
+> **Non-VA users**: Use SQL files to create custom visualizations for your environment.
 
 ## Overview
 
@@ -15,25 +20,44 @@ A comprehensive SQL Server solution for comparing Point-of-Care (POC) laboratory
 ## 🚀 Quick Start
 
 ### Prerequisites
-- SQL Server 2016+ or Azure SQL Database
-- PowerBI Desktop (for dashboard visualization)
+- SQL Server 2016+ or Azure SQL Database with VA data access
+- VA network access and appropriate database permissions
+- PowerBI Desktop (for dashboard visualization after SQL setup)
 - Healthcare data warehouse with laboratory test data
-- Administrative access to create stored procedures
+- Administrative access to create stored procedures on your facility's database
+
+### Implementation Steps
+1. **Download Project Files** from GitHub repository
+2. **Deploy SQL Solution** using the provided stored procedure files
+3. **Configure Facility Parameters** in the SQL code for your station
+4. **Request PowerBI Template** from project author via VA email
+5. **Connect PowerBI** to your newly created stored procedure
 
 ### Basic Setup
-1. **Configure your facility parameters** in the main SQL file:
+1. **Download the SQL files** from this GitHub repository:
+   ```
+   - Laboratory POC Comparison (updated July 2025).sql (Main procedure)
+   - Individual test family queries in Other Documents/
+   - CDW Lab Test Names.sql (for finding your test SIDs)
+   ```
+
+2. **Deploy to your VA database** with appropriate permissions:
+   ```sql
+   -- Execute the main stored procedure script on your facility's database
+   -- File: "Laboratory POC Comparison (updated July 2025).sql"
+   ```
+
+3. **Configure your facility parameters** in the SQL code:
    ```sql
    DECLARE @FacilityStationNumber INT = 578;  -- CHANGE THIS: Your facility number
    ```
 
-2. **Identify your test SIDs** using the CDW Lab Test Names utility:
-   ```sql
-   -- Use "Other Documents/CDW Lab Test Names.sql" to find your facility's test IDs
-   ```
+4. **Request PowerBI template** from the author:
+   - **Contact**: Kyle.Coder@va.gov (VA-to-VA email only)
+   - **Include**: Your facility name, station number, and intended use
+   - **Receive**: Clean PowerBI template file via secure VA channels
 
-3. **Execute the main stored procedure** or individual test comparisons
-
-4. **Connect PowerBI dashboard** for executive reporting and visualization
+5. **Connect PowerBI to your stored procedure** and refresh data
 
 ## 📊 Features
 
@@ -60,7 +84,10 @@ Laboratory Testing POC Comparison/
 ├── README.md                                          # This documentation
 ├── .gitignore                                         # Git exclusions (archives, sensitive files)
 ├── Laboratory POC Comparison (updated July 2025).sql  # Main comprehensive stored procedure
-├── Laboratory Testing POC Comparison.pbix             # PowerBI dashboard
+├── POWERBI_TEMPLATE_REQUEST.md                       # How to request PowerBI template (VA only)
+├── POWERBI_LICENSE_PROTECTION.md                     # Guide for embedding license in .pbix files
+├── TEMPLATE_SETUP_INSTRUCTIONS.md                    # Setup guide for SQL deployment and PowerBI requests
+├── DATA_SECURITY_VERIFICATION.md                     # Security considerations for VA implementations
 ├── Other Documents/
 │   ├── CDW Lab Test Names.sql                        # Test SID lookup utility
 │   └── Individualized SQL Queries/                   # Test-specific queries
@@ -71,39 +98,65 @@ Laboratory Testing POC Comparison/
 │       ├── LabPOC_Compare_Troponin(July2025).sql
 │       └── LabPOC_Compare_Urinalysis(July2025).sql
 └── PROJECT_ANALYSIS_AND_RECOMMENDATIONS.md           # Comprehensive project analysis
+
+Note: PowerBI template (.pbix) available by request from author via VA email only
 ```
 
 ## 🔧 Installation & Configuration
 
-### Step 1: Database Setup
-```sql
--- 1. Create or identify your target database
-USE [YourDatabaseName]
-GO
+### Step 1: Download Project Files
+```powershell
+# Clone or download from GitHub
+git clone https://github.com/[repository-url]
+# OR download ZIP file from GitHub repository
+```
 
--- 2. Execute the main stored procedure script
+### Step 2: SQL Database Setup
+```sql
+-- 1. Connect to your facility's SQL Server with appropriate VA permissions
+-- 2. Execute the main stored procedure script on your database
 -- File: "Laboratory POC Comparison (updated July 2025).sql"
 
 -- 3. Configure facility-specific parameters
-DECLARE @FacilityStationNumber INT = [YOUR_FACILITY_NUMBER];
+DECLARE @FacilityStationNumber INT = [YOUR_FACILITY_NUMBER];  -- CHANGE THIS
 ```
 
-### Step 2: Test SID Configuration
+### Step 3: Test SID Configuration
 ```sql
 -- Use the CDW Lab Test Names utility to identify your facility's test SIDs
 -- File: "Other Documents/CDW Lab Test Names.sql"
 
--- Update the following SIDs in the main procedure:
+-- Update the following SIDs in the main procedure for your facility:
 -- POC_GLUCOSE: 1000068127 -> [YOUR_POC_GLUCOSE_SID]
 -- LAB_GLUCOSE: 1000027461 -> [YOUR_LAB_GLUCOSE_SID]
--- (Repeat for all test families)
+-- (Repeat for all test families - see included documentation)
 ```
 
-### Step 3: PowerBI Dashboard Setup
-1. Open `Laboratory Testing POC Comparison.pbix`
-2. Update data source connection to your SQL Server
-3. Refresh data to populate with your facility's results
-4. Customize facility-specific branding and parameters
+### Step 4: Request PowerBI Template
+```
+📧 Email Request Required (VA-to-VA Only):
+   
+To: Kyle.Coder@va.gov
+Subject: PowerBI Template Request - Laboratory POC Comparison Tool
+
+Include in your request:
+- Your facility name and station number
+- Intended use case and stakeholders
+- Confirmation that SQL procedures are deployed
+- Your VA email address for secure delivery
+
+Response: Clean PowerBI template delivered via secure VA channels
+```
+
+### Step 5: PowerBI Connection Setup
+```sql
+-- After receiving PowerBI template:
+-- 1. Open template in PowerBI Desktop
+-- 2. Update data source connection to point to your facility's database
+-- 3. Connect to your deployed stored procedure
+-- 4. Refresh data to populate with your facility's results
+-- 5. Customize facility-specific branding and parameters
+```
 
 ## 💡 Usage Examples
 
@@ -197,6 +250,39 @@ Laboratory test discrepancies between POC and traditional methods can indicate:
 - **Additional Visualizations:** Extend dashboard with facility-specific charts
 - **Mobile Optimization:** Configure for tablet/mobile access
 
+### PowerBI Template Access
+**🔒 VA Security Approach:**
+
+For security and compliance reasons, the PowerBI template (.pbix file) is **not included in this public repository**. Instead, VA facilities can access the template through secure internal channels.
+
+**📧 How to Request PowerBI Template:**
+1. **Deploy SQL Solution First**: Complete SQL setup using files from this repository
+2. **Email Request**: Contact Kyle.Coder@va.gov (VA-to-VA email required)
+3. **Include in Request**:
+   - Your facility name and station number
+   - Confirmation that SQL procedures are deployed and tested
+   - Intended use case and stakeholders
+   - Your official VA email address
+4. **Secure Delivery**: Clean template delivered via secure VA internal methods
+
+**Why This Approach:**
+- **Data Security**: Eliminates risk of sensitive data exposure in public repositories
+- **VA Compliance**: Maintains appropriate security controls for healthcare data
+- **User Verification**: Ensures users have proper VA access and permissions
+- **Support Quality**: Enables direct communication for implementation assistance
+
+### PowerBI License Protection
+**⚠️ For Internal VA Distribution:**
+
+When sharing PowerBI files within the VA network, implement the attribution protection methods documented in `POWERBI_LICENSE_PROTECTION.md` to ensure proper credit and license compliance.
+
+**Quick Implementation for VA Users:**
+1. Download SQL files from this GitHub repository
+2. Deploy stored procedures on your facility's database with appropriate VA permissions
+3. Configure facility parameters (station number, test SIDs) in the SQL code
+4. Email Kyle.Coder@va.gov to request PowerBI template via secure VA channels
+5. Connect PowerBI template to your deployed stored procedure and refresh data
+
 ## 🧪 Testing & Validation
 
 ### Data Quality Checks
@@ -247,8 +333,11 @@ Laboratory test discrepancies between POC and traditional methods can indicate:
 
 ### Documentation
 - **PROJECT_ANALYSIS_AND_RECOMMENDATIONS.md:** Comprehensive technical analysis
+- **POWERBI_TEMPLATE_REQUEST.md:** How to request PowerBI template via secure VA channels
+- **POWERBI_LICENSE_PROTECTION.md:** Complete guide for embedding license protection in .pbix files
+- **TEMPLATE_SETUP_INSTRUCTIONS.md:** Step-by-step guide for SQL deployment and template requests
+- **DATA_SECURITY_VERIFICATION.md:** Security considerations and compliance requirements
 - **Inline SQL Comments:** Detailed code documentation throughout all files
-- **PowerBI Documentation:** Dashboard setup and customization guide
 
 ### Support & Community
 - **GitHub Issues:** Primary support channel for bug reports and questions
