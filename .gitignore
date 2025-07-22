@@ -1,0 +1,122 @@
+# Laboratory Testing POC Comparison - Git Ignore File
+# Created: July 22, 2025
+# Purpose: Exclude sensitive, archived, and development files from public repository
+
+# =============================================================================
+# ARCHIVE FILES (Historical/Development Only - Not for Public Release)
+# =============================================================================
+xArchive Versions/
+**/xArchive Versions/**
+xArchive*
+
+# =============================================================================
+# SENSITIVE INFORMATION & VA-SPECIFIC FILES
+# =============================================================================
+# Connection strings and VA-internal configurations
+**/connection-strings*
+**/va-internal*
+**/production-data*
+**/CDW*connection*
+*.url
+
+# VA-specific file extensions and patterns
+*.ssmssln
+*.ssmssqlproj
+*.suo
+*.user
+
+# =============================================================================
+# DATABASE FILES & BACKUPS
+# =============================================================================
+*.bak
+*.ldf
+*.mdf
+*.ndf
+**/backup/**
+**/backups/**
+
+# =============================================================================
+# DEVELOPMENT & TEMPORARY FILES
+# =============================================================================
+# SQL Server Management Studio temporary files
+*.sqlsuo
+*.tmp
+~$*
+
+# PowerBI temporary files
+*.pbix.tmp
+*.pbit.tmp
+
+# Excel temporary files  
+~*.xlsx
+~*.xlsm
+~*.xls
+
+# =============================================================================
+# LOGS & DEBUG FILES
+# =============================================================================
+*.log
+**/logs/**
+debug/
+**/debug/**
+
+# =============================================================================
+# OPERATING SYSTEM FILES
+# =============================================================================
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# =============================================================================
+# IDE & EDITOR FILES
+# =============================================================================
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# SQL Server Data Tools
+*.jfm
+*.dbmdl
+*.dbproj.schemaview
+
+# =============================================================================
+# LARGE BINARY FILES
+# =============================================================================
+*.iso
+*.dmg
+*.gz
+*.zip
+*.rar
+*.7z
+
+# =============================================================================
+# DOCUMENTATION DRAFTS & WORK-IN-PROGRESS
+# =============================================================================
+**/draft/**
+**/drafts/**
+**/wip/**
+**/work-in-progress/**
+*_draft.*
+*_wip.*
+
+# =============================================================================
+# PROJECT-SPECIFIC EXCLUSIONS
+# =============================================================================
+# Original source files (keep main versions only)
+**/Provided Original Source File.*
+
+# Test queries and experimental files
+**/Test*
+**/Experimental*
+SQLQuery*.sql
+
+# =============================================================================
+# END OF .GITIGNORE
+# =============================================================================
