@@ -7,16 +7,100 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Planned for v1.8.0
-- [ ] Complete README.md for community adoption
-- [ ] Finalize user documentation
-- [ ] Prepare for v2.0.0 public release
-
 ### Planned for v2.0.0 - Major Public Release
 - [ ] Public GitHub repository publication
 - [ ] Community contribution guidelines
 - [ ] Enhanced cross-facility portability
 - [ ] Automated testing framework
+
+## [1.8.0] - 2025-07-23
+
+### Major Documentation Enhancement & Security Integration Release
+
+This release represents a comprehensive overhaul of the entire documentation ecosystem and integration of advanced security features, making the project fully production-ready for public release.
+
+### Added
+- **🔒 Advanced Security Framework**
+  - Complete `[dbo].[sp_SignAppObject]` stored procedure for VA certificate-based signing
+  - Comprehensive security documentation with HIPAA compliance guidelines
+  - Certificate validation and digital signing workflow implementation
+  - Enhanced security controls in SECURITY.md with specific procedure references
+
+- **📚 Complete Documentation Overhaul** 
+  - Fully rewritten README.md with step-by-step setup and deployment guidance
+  - Comprehensive QUICK_START.md with beginner-friendly instructions
+  - Enhanced TECHNICAL_GUIDE.md with detailed stored procedure deployment section
+  - Updated CLINICAL_USER_GUIDE.md with new procedure references
+  - Comprehensive .copilot-instructions.md reflecting latest architecture
+  - Updated CONTRIBUTING.md and DATA_SECURITY_VERIFICATION.md
+
+- **🏗️ Dual Operation Architecture**
+  - Clear documentation for Query Mode vs Stored Procedure Mode operation
+  - Detailed toggling instructions between operational modes
+  - PowerBI integration guidance for both operational approaches
+  - Rollback procedures for deployment flexibility
+
+- **📋 Professional Project Structure**
+  - Recommended file naming convention: `LabTest_POC_Compare_Analysis.sql`
+  - Standardized procedure naming: `[App].[LabTest_POC_Compare]`
+  - Cross-reference consistency across all documentation files
+  - Professional GitHub repository description and metadata
+
+### Changed
+- **🔄 Procedure Architecture Improvements**
+  - Updated main stored procedure name from legacy conventions to `[App].[LabTest_POC_Compare]`
+  - Enhanced parameter documentation and usage examples
+  - Improved error handling and user guidance messages
+  - Standardized code documentation with clinical context
+
+- **📖 Documentation Standardization**
+  - Aligned all documentation files with consistent procedure names and file references
+  - Updated all code examples to reflect current architecture
+  - Enhanced cross-file consistency for seamless user experience
+  - Improved technical accuracy across all user guides
+
+- **🛡️ Security Enhancement Integration**
+  - Updated all documentation to reference certificate-based signing requirements
+  - Enhanced security considerations in all technical guides
+  - Improved HIPAA compliance documentation and procedures
+  - Integrated VA-specific security requirements throughout documentation
+
+### Fixed
+- **✅ Cross-Documentation Consistency**
+  - Resolved all inconsistent procedure name references across documentation
+  - Fixed outdated file name references in technical guides
+  - Corrected deployment instruction inconsistencies
+  - Aligned all code examples with current best practices
+
+- **🔧 Technical Documentation Accuracy**
+  - Updated SQL Server version requirements and compatibility information
+  - Corrected PowerBI integration instructions for stored procedure mode
+  - Fixed deployment validation checklist items
+  - Enhanced troubleshooting guidance with current procedure names
+
+### Technical Specifications
+- **Database Platform:** SQL Server 2016+ or Azure SQL Database
+- **Security:** VA certificate-based digital signing with `[dbo].[sp_SignAppObject]`
+- **Architecture:** Dual-mode operation (Query/Stored Procedure) with seamless toggling
+- **Documentation:** Complete user guides for clinical, technical, and administrative users
+- **Compliance:** Enhanced HIPAA compliance with comprehensive security framework
+
+### Migration Notes
+- All documentation now references the standardized `[App].[LabTest_POC_Compare]` procedure name
+- Users should update any existing references to align with new naming conventions
+- Security signing procedure must be deployed before main procedure for full compliance
+- PowerBI integrations should be updated to use stored procedure mode for optimal performance
+
+### Files Updated in This Release
+- README.md (complete rewrite)
+- QUICK_START.md (complete rewrite) 
+- docs/TECHNICAL_GUIDE.md (major enhancements with stored procedure deployment)
+- SECURITY.md (enhanced with certificate-based signing)
+- docs/CLINICAL_USER_GUIDE.md (updated procedure references)
+- .copilot-instructions.md (architecture and naming updates)
+- CHANGELOG.md (comprehensive release documentation)
+
+This release establishes the project as a fully mature, professionally documented, and security-compliant healthcare solution ready for community adoption and public release.
 
 ## [1.7.1] - 2025-07-22
 

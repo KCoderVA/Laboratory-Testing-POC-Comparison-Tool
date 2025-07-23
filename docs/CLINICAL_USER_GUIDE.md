@@ -55,11 +55,11 @@ The Laboratory Testing POC Comparison tool helps you:
 **PowerBI Dashboard (Recommended for Clinical Staff):**
 - Visual dashboards with charts and graphs
 - Interactive filtering and drill-down capabilities
-- Automated refresh of data
+- Automated refresh of data via `[App].[LabTest_POC_Compare]` stored procedure
 - Easy export of reports
 
 **SQL Queries (For Advanced Users):**
-- Direct access to detailed data
+- Direct access to detailed data using `LabTest_POC_Compare_Analysis.sql`
 - Custom analysis capabilities
 - Real-time query execution
 - Detailed diagnostic information

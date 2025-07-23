@@ -6,6 +6,7 @@ This guide provides detailed technical information for IT professionals, databas
 - [Architecture Overview](#architecture-overview)
 - [Database Requirements](#database-requirements)
 - [Installation Guide](#installation-guide)
+- [Stored Procedure Deployment](#stored-procedure-deployment)
 - [Configuration Management](#configuration-management)
 - [Performance Optimization](#performance-optimization)
 - [Security Implementation](#security-implementation)
@@ -20,34 +21,42 @@ This guide provides detailed technical information for IT professionals, databas
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   Data Sources  │    │  SQL Processing │    │   Presentation  │
 │                 │    │                 │    │                 │
-│ • Laboratory    │───▶│ • Stored Proc   │───▶│ • PowerBI       │
-│   Database      │    │ • Individual    │    │   Dashboard     │
-│ • Test Results  │    │   Queries       │    │ • SQL Results   │
-│ • Patient Data  │    │ • Aggregations  │    │ • Reports       │
+│ • CDWWork Lab   │───▶│ • [App].[LabTest│───▶│ • PowerBI       │
+│   Database      │    │   _POC_Compare] │    │   Dashboard     │
+│ • Test Results  │    │ • Security      │    │ • SQL Results   │
+│ • Patient Data  │    │   Signing       │    │ • Reports       │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
 ```
 
 ### Data Flow
-1. **Data Extraction:** SQL queries access laboratory tables
-2. **Data Processing:** Time-based correlation and statistical analysis
-3. **Data Presentation:** Results displayed in PowerBI or SQL output
-4. **Quality Monitoring:** Automated alerts and trending analysis
+1. **Data Extraction:** SQL queries access CDWWork laboratory tables
+2. **Data Processing:** Time-based correlation and statistical analysis  
+3. **Security Signing:** VA-compliant digital signature via sp_SignAppObject
+4. **Data Presentation:** Results via PowerBI DirectQuery or SQL output
+5. **Quality Monitoring:** Automated alerts and trending analysis
 
 ### Technology Stack
-- **Database:** SQL Server 2016+ or Azure SQL Database
-- **Analytics:** T-SQL stored procedures and functions
-- **Visualization:** Microsoft PowerBI Desktop/Service
-- **Development:** SQL Server Management Studio or Azure Data Studio
-- **Version Control:** Git (recommended)
-- **Documentation:** Markdown files
+- **Database:** SQL Server 2016+ with VA CDW access
+- **Analytics:** T-SQL stored procedures (`[App].[LabTest_POC_Compare]`)
+- **Security:** Certificate-based signing (`[dbo].[sp_SignAppObject]`)
+- **Visualization:** Microsoft PowerBI Desktop/Service with DirectQuery
+- **Development:** VS Code with SQL extensions or SSMS
+- **Version Control:** Git with secure file handling
+- **Documentation:** Comprehensive markdown documentation
 
 ## Database Requirements
 
-### Minimum Requirements
-- **SQL Server 2016 or later** (all editions supported)
-- **Azure SQL Database** (Basic tier or higher)
-- **Memory:** 4GB RAM minimum, 8GB+ recommended
-- **Storage:** 10GB free space for data and logs
+### VA-Specific Requirements
+- **CDW Access:** Connection to `VhaCdwDwhSql33.vha.med.va.gov`
+- **NDS Operational Access:** PHI/Real SSN data access approval
+- **Database Schema:** Write access to facility's App schema (for stored procedures)
+- **Security Certificate:** VA-approved signing certificate installed
+
+### Minimum Technical Requirements
+- **SQL Server 2016 or later** (Enterprise edition recommended for CDW)
+- **Memory:** 8GB RAM minimum for large dataset processing
+- **Storage:** 50GB+ for typical facility data volume
+- **Network:** Secure VA network connectivity
 - **CPU:** 2 cores minimum, 4+ cores recommended
 
 ### Database Permissions
@@ -139,6 +148,158 @@ WHERE type = 'P' AND name LIKE '%LabPOC%'
 ### Step 4: PowerBI Configuration
 ```powershell
 # Install PowerBI Desktop (if not already installed)
+# Download from: https://powerbi.microsoft.com/desktop
+```
+
+## Stored Procedure Deployment
+
+### Overview
+The Laboratory POC Comparison tool can operate in two modes:
+1. **Query Mode:** Direct SQL execution with CSV-like results
+2. **Stored Procedure Mode:** Database-deployed procedure for PowerBI integration
+
+### Deployment Prerequisites
+- Database write permissions to facility's App schema
+- VA signing certificate installed (`Certificate for App account signing to CDWWork`)
+- Access to deploy `[dbo].[sp_SignAppObject]` security procedure
+
+### Step-by-Step Deployment
+
+#### 1. Prepare the Main Analysis File
+```sql
+-- Open: LabTest_POC_Compare_Analysis.sql
+-- Locate lines around 260 and UNCOMMENT the following:
+
+CREATE OR ALTER PROCEDURE [App].[LabTest_POC_Compare]    
+AS
+BEGIN
+EXEC dbo.sp_SignAppObject [LabTest_POC_Compare]
+
+-- [All existing query logic remains here]
+
+-- Locate end of file and UNCOMMENT:
+END
+GO
+```
+
+#### 2. Deploy Security Signing Procedure
+```sql
+-- First deploy the security procedure from: [dbo].[sp_SignAppObject].sql
+-- This must be deployed BEFORE the main procedure for signing to work
+
+-- Verify certificate exists:
+SELECT name, issuer_name, subject, start_date, expiry_date 
+FROM sys.certificates 
+WHERE issuer_name = 'Certificate for App account signing to CDWWork';
+
+-- Expected: One certificate record, otherwise contact VA DBA
+```
+
+#### 3. Execute Main Procedure Deployment
+```sql
+-- Execute the modified LabTest_POC_Compare_Analysis.sql file
+-- This creates [App].[LabTest_POC_Compare] in your facility's database
+
+-- Verify creation:
+SELECT name, create_date, modify_date, type_desc
+FROM sys.objects 
+WHERE name = 'LabTest_POC_Compare' AND type = 'P';
+```
+
+#### 4. Apply Security Signature
+```sql
+-- Sign the procedure for VA compliance:
+EXEC dbo.sp_SignAppObject 'LabTest_POC_Compare'
+
+-- Expected output: "Signed object LabTest_POC_Compare with certificate [CertName]"
+
+-- Verify signature:
+SELECT 
+    SO.name AS ObjectName,
+    SCHEMA_NAME(SO.schema_id) AS SchemaName,
+    CASE WHEN CP.major_id IS NOT NULL THEN 'SIGNED' ELSE 'NOT SIGNED' END AS SignatureStatus,
+    C.name AS CertificateName
+FROM sys.objects SO
+LEFT JOIN sys.crypt_properties CP ON SO.object_id = CP.major_id
+LEFT JOIN sys.certificates C ON C.thumbprint = CP.thumbprint 
+WHERE SO.name = 'LabTest_POC_Compare';
+```
+
+#### 5. Grant Execution Permissions
+```sql
+-- Grant permissions to PowerBI service account and authorized users:
+GRANT EXECUTE ON [App].[LabTest_POC_Compare] TO [PowerBI_ServiceAccount];
+GRANT EXECUTE ON [App].[LabTest_POC_Compare] TO [Laboratory_Users];
+
+-- Replace with your facility's actual account names
+```
+
+#### 6. Test Procedure Execution
+```sql
+-- Test the deployed procedure:
+EXEC [App].[LabTest_POC_Compare];
+
+-- Expected: Same results as query mode, but from stored procedure
+-- Verify execution time and result set structure
+```
+
+### PowerBI Integration with Stored Procedure
+
+#### DirectQuery Connection
+```sql
+-- PowerBI Connection Settings:
+-- Server: VhaCdwDwhSql33.vha.med.va.gov  
+-- Database: [Your_Facility_Database]
+-- Data Connectivity mode: DirectQuery
+-- Custom SQL Query: EXEC [App].[LabTest_POC_Compare]
+```
+
+#### Automated Refresh Configuration
+```sql
+-- Schedule procedure execution via SQL Server Agent (optional):
+USE msdb;
+GO
+
+EXEC dbo.sp_add_job
+    @job_name = N'Laboratory POC Comparison - Daily Refresh',
+    @enabled = 1;
+
+EXEC dbo.sp_add_jobstep
+    @job_name = N'Laboratory POC Comparison - Daily Refresh',
+    @step_name = N'Execute Analysis',
+    @command = N'EXEC [App].[LabTest_POC_Compare]',
+    @database_name = N'[Your_Facility_Database]';
+
+-- Configure schedule as needed for your facility's reporting requirements
+```
+
+### Deployment Validation Checklist
+
+- [ ] `[dbo].[sp_SignAppObject]` deployed successfully
+- [ ] VA signing certificate verified and accessible
+- [ ] `[App].[LabTest_POC_Compare]` created without errors
+- [ ] Procedure signed with security certificate
+- [ ] Execution permissions granted to appropriate accounts
+- [ ] Test execution returns expected results
+- [ ] PowerBI connection established (if applicable)
+- [ ] Performance meets expectations (<30 seconds typical)
+
+### Rollback Procedures
+
+#### Remove Stored Procedure
+```sql
+-- If deployment needs to be reversed:
+DROP PROCEDURE IF EXISTS [App].[LabTest_POC_Compare];
+
+-- Verify removal:
+SELECT name FROM sys.objects WHERE name = 'LabTest_POC_Compare';
+-- Should return no results
+```
+
+#### Revert to Query Mode
+1. Re-comment the stored procedure lines in the SQL file
+2. Uncomment the variable declarations
+3. Use direct query execution instead of stored procedure calls
 # Download from: https://powerbi.microsoft.com/desktop/
 
 # Configure data source in PowerBI
@@ -152,11 +313,9 @@ WHERE type = 'P' AND name LIKE '%LabPOC%'
 ### Step 5: Validation Testing
 ```sql
 -- Test execution with small date range
-EXEC sp_LabPOCComparison 
-    @FacilityStationNumber = 'YOUR_STATION',
-    @StartDate = '2024-01-01',
-    @EndDate = '2024-01-02'
+EXEC [App].[LabTest_POC_Compare]
 
+-- For query mode testing, use the LabTest_POC_Compare_Analysis.sql file directly
 -- Verify performance
 SET STATISTICS IO ON
 SET STATISTICS TIME ON
@@ -310,7 +469,7 @@ CREATE ROLE [LabPOC_Admin]
 -- Grant permissions by role
 GRANT SELECT ON [dbo].[Chem_PatientLabChem] TO [LabPOC_ReadOnly]
 GRANT SELECT, INSERT, UPDATE, DELETE ON [LabPOC].[Configuration] TO [LabPOC_Admin]
-GRANT EXECUTE ON [dbo].[sp_LabPOCComparison] TO [LabPOC_Analyst]
+GRANT EXECUTE ON [App].[LabTest_POC_Compare] TO [LabPOC_Analyst]
 
 -- Add users to roles
 ALTER ROLE [LabPOC_Analyst] ADD MEMBER [DOMAIN\LabAnalyst]
@@ -511,11 +670,8 @@ public class LabPOCService
         DateTime endDate)
     {
         using var connection = new SqlConnection(_connectionString);
-        var command = new SqlCommand("sp_LabPOCComparison", connection);
+        var command = new SqlCommand("[App].[LabTest_POC_Compare]", connection);
         command.CommandType = CommandType.StoredProcedure;
-        command.Parameters.AddWithValue("@FacilityStationNumber", facilityNumber);
-        command.Parameters.AddWithValue("@StartDate", startDate);
-        command.Parameters.AddWithValue("@EndDate", endDate);
         
         // Execute and return results
     }

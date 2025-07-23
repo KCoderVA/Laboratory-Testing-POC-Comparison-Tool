@@ -100,29 +100,30 @@ quality-control, laboratory-management, healthcare-software, medical-informatics
 [![PowerBI](https://img.shields.io/badge/PowerBI-Compatible-orange.svg)](https://powerbi.microsoft.com/)
 [![Healthcare](https://img.shields.io/badge/Healthcare-Laboratory%20QA-green.svg)]()
 [![HIPAA](https://img.shields.io/badge/HIPAA-Compliant-red.svg)]()
-[![Version](https://img.shields.io/badge/Version-2.0.0-brightgreen.svg)]()
+[![Version](https://img.shields.io/badge/Version-1.8.0-brightgreen.svg)]()
 ```
 
-## Initial GitHub Release Notes (v2.0.0)
+## Initial GitHub Release Notes (v1.8.0)
 ```markdown
-# 🎉 Initial Public Release - Laboratory Testing POC Comparison Tool
+# 🎉 Major Documentation & Security Enhancement Release - Laboratory Testing POC Comparison Tool
 
 ## Overview
-We're excited to release this comprehensive healthcare laboratory quality assurance solution to the open source community! Originally developed at Edward Hines Jr. VA Hospital, this tool has been refined through months of clinical use and is now ready for broader healthcare adoption.
+We're excited to release this major update to our comprehensive healthcare laboratory quality assurance solution! This release represents a complete overhaul of documentation and integration of advanced security features, making the project fully production-ready for broader healthcare adoption.
 
-## 🏥 What's Included
-- **Complete SQL Server Solution** - Main stored procedure + 6 individual test family queries
-- **PowerBI Dashboard** - Executive reporting with automated refresh
-- **Comprehensive Documentation** - Clinical guides, technical implementation, and user documentation
-- **Security Framework** - HIPAA-compliant data handling and privacy protection
-- **Community Resources** - Contribution guidelines, issue templates, and support documentation
+## 🏥 What's New in v1.8.0
+- **Complete Documentation Suite** - Fully rewritten guides for clinical, technical, and administrative users
+- **Advanced Security Framework** - VA certificate-based signing with `[dbo].[sp_SignAppObject]`
+- **Dual Operation Modes** - Seamless toggling between Query and Stored Procedure modes
+- **Professional Project Structure** - Standardized naming and cross-file consistency
+- **Enhanced Deployment Guidance** - Step-by-step stored procedure deployment instructions
 
 ## 🚀 Quick Start
-1. Download the main SQL file: `Laboratory POC Comparison (updated July 2025).sql`
-2. Configure your facility parameters and test SIDs
-3. Execute the stored procedure in your SQL Server environment
-4. Connect the PowerBI dashboard for visualization
-5. Start monitoring laboratory quality metrics!
+1. Download the main SQL file: `LabTest_POC_Compare_Analysis.sql`
+2. Configure your facility parameters and test SIDs  
+3. Deploy security signing procedure: `[dbo].[sp_SignAppObject]`
+4. Execute the main stored procedure `[App].[LabTest_POC_Compare]`
+5. Connect PowerBI dashboard for executive reporting
+6. Start monitoring laboratory quality metrics!
 
 ## 🎯 Immediate Benefits
 - **Automated Quality Assurance** - Replace manual comparison processes

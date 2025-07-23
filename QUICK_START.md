@@ -1,53 +1,171 @@
-# Quick Start Guide
+# Quick Start Guide - Laboratory POC Comparison Tool
 
-Welcome to the Laboratory Testing POC Comparison project! This guide will help you get up and running quickly.
+🚀 **Get up and running in 15 minutes!**
+
+This guide provides the fastest path to deploy and run the Laboratory POC Comparison analysis at your VA facility.
 
 ## Table of Contents
-- [Prerequisites](#prerequisites)
-- [Quick Setup](#quick-setup)
-- [First Run](#first-run)
-- [Basic Configuration](#basic-configuration)
+- [Prerequisites Checklist](#prerequisites-checklist)
+- [Quick Setup (5 Steps)](#quick-setup-5-steps)
+- [First Execution](#first-execution)
+- [Optional: PowerBI Integration](#optional-powerbi-integration)
 - [Troubleshooting](#troubleshooting)
-- [Next Steps](#next-steps)
 
-## Prerequisites
+## Prerequisites Checklist
 
-### Required Software
-- **SQL Server 2016 or later** (or Azure SQL Database)
-- **PowerBI Desktop** (latest version recommended)
-- **SQL Server Management Studio (SSMS)** or Azure Data Studio
+### ✅ Required VA Access (Must Complete First)
 
-### Required Access
-- **Database Access:** Read access to laboratory data tables
-- **Facility Information:** Your facility's station number
-- **Test Data:** Access to laboratory test results for analysis
+**🔐 Step 1: NDS Operational Access**
+- [ ] Complete NDS Operational Access request
+- [ ] Visit: https://vaww.vhadataportal.med.va.gov/Data-Access/Operations-Access *(VA network only)*
+- [ ] Wait for PHI/Real SSN access approval
 
-### Recommended Knowledge
-- Basic SQL query knowledge
-- Understanding of laboratory operations
-- Familiarity with PowerBI (for dashboard use)
+**💻 Step 2: SQL Software Installation**
+- [ ] **Option A:** Download VS Code from https://code.visualstudio.com/download
+- [ ] **Option B:** Request SSMS via https://yourit.va.gov (submit OIT ticket)
+  - [ ] Or use VA Software Center: `softwarecenter:SoftwareID=ScopeId_16785680-02FE-4B9B-B358-62C5C20205D4/Application_a72f3f2b-d050-4637-9e32-8091ecda9e61`
 
-## Quick Setup
+**🔗 Step 3: Database Connection Setup**
+- [ ] Configure connection to: `VhaCdwDwhSql33.vha.med.va.gov`
+- [ ] Test connection with your VA credentials
+- [ ] Verify access to CDWWork database
 
-### Step 1: Download the Project
-```bash
-# Clone the repository
-git clone https://github.com/[username]/laboratory-testing-poc-comparison.git
-cd laboratory-testing-poc-comparison
+**📊 Optional Step 4: Database Write Access** *(For stored procedures only)*
+- [ ] Contact your CDW owner via: https://dvagov.sharepoint.com/sites/OITBISL/SitePages/CDW-Site-Directory.aspx
+- [ ] Request write access to your facility's database schema
+
+## Quick Setup (5 Steps)
+
+### 🔽 Step 1: Download Files
+Download the main analysis file:
+```
+📄 LabTest_POC_Compare_Analysis.sql
+📄 [dbo].[sp_SignAppObject].sql (for stored procedure mode)
 ```
 
-### Step 2: Database Connection
-1. Open SQL Server Management Studio
-2. Connect to your database server
-3. Open the main SQL file: `Laboratory POC Comparison (updated July 2025).sql`
-
-### Step 3: Configure Facility Settings
-Edit the configuration section at the top of the SQL file:
+### 🔧 Step 2: Configure Facility Settings
+Open `LabTest_POC_Compare_Analysis.sql` and modify line 285:
 
 ```sql
--- =============================================
--- FACILITY CONFIGURATION
--- =============================================
+-- CHANGE THIS LINE TO YOUR FACILITY:
+DECLARE @FacilityStationNumber INT = 578;  -- Replace 578 with your station number
+```
+
+**Common Station Numbers:**
+- Edward Hines Jr. VA: `578`
+- Milwaukee VA: `695` 
+- Find yours at: https://dvagov.sharepoint.com/sites/OITBISL/SitePages/CDW-Site-Directory.aspx
+
+### ▶️ Step 3: Choose Execution Mode
+
+**Option A: Query Mode (Recommended for first use)**
+- Keep stored procedure lines commented out (default)
+- Execute query directly in VS Code/SSMS
+- Results appear as CSV-like table
+
+**Option B: Stored Procedure Mode**
+1. Uncomment these lines (around line 260):
+   ```sql
+   CREATE OR ALTER PROCEDURE [App].[LabTest_POC_Compare]    
+   AS
+   BEGIN
+   EXEC dbo.sp_SignAppObject [LabTest_POC_Compare]
+   ```
+2. Uncomment at end of file:
+   ```sql
+   END
+   GO
+   ```
+
+### 🏃‍♂️ Step 4: Execute Query
+- **In VS Code:** Press `Ctrl+Shift+E` to execute
+- **In SSMS:** Press `F5` or click Execute button
+- **Expected runtime:** 2-5 minutes depending on data volume
+
+### ✅ Step 5: Verify Results
+Expected output includes:
+- Patient identifiers (Last 4 SSN)
+- Test collection times and results
+- Location information
+- Test family groupings (Glucose, Creatinine, etc.)
+
+## First Execution
+
+### What to Expect
+- **Data Range:** Fiscal year to date (October 1st to current date)
+- **Test Families:** 6 major POC vs Lab comparisons
+- **Output Format:** Structured data suitable for analysis
+- **Performance:** Optimized with temporary tables and indexing
+
+### Validation Checklist
+- [ ] Results contain your facility's data only
+- [ ] Date ranges match fiscal year expectations
+- [ ] Test result counts seem reasonable for your facility
+- [ ] No error messages in execution output
+
+## Optional: PowerBI Integration
+
+### For Query Mode Users
+1. Copy query results to Excel or CSV
+2. Import into PowerBI Desktop
+3. Create visualizations as needed
+
+### For Stored Procedure Mode Users
+1. Deploy stored procedure successfully
+2. Connect PowerBI to database
+3. Use DirectQuery to `[App].[LabTest_POC_Compare]`
+4. Request PowerBI template: Kyle.Coder@va.gov
+
+**PowerBI Connection String:**
+```
+Server: VhaCdwDwhSql33.vha.med.va.gov
+Database: [Your facility's database]
+Procedure: EXEC [App].[LabTest_POC_Compare]
+```
+
+## Troubleshooting
+
+### Common Issues
+
+**❌ "Access denied to CDWWork database"**
+- ✅ Verify NDS Operational Access completion
+- ✅ Check VA network connection
+- ✅ Confirm database permissions
+
+**❌ "Object name '[App].[LabTest_POC_Compare]' is invalid"**
+- ✅ Ensure you're in stored procedure mode
+- ✅ Verify procedure was created successfully
+- ✅ Check database write permissions
+
+**❌ "No results returned"**
+- ✅ Verify your facility station number is correct
+- ✅ Check if your facility has POC testing data
+- ✅ Adjust date range if needed
+
+**❌ Query runs too slowly**
+- ✅ Limit date range for testing (modify @StartDate/@EndDate)
+- ✅ Check database server performance
+- ✅ Consider off-peak execution times
+
+### Getting Help
+
+1. **Technical Issues:** Check [TECHNICAL_GUIDE.md](TECHNICAL_GUIDE.md)
+2. **Clinical Questions:** Review [CLINICAL_USER_GUIDE.md](CLINICAL_USER_GUIDE.md) 
+3. **Security Concerns:** See [DATA_SECURITY_VERIFICATION.md](DATA_SECURITY_VERIFICATION.md)
+4. **Contact Author:** Kyle.Coder@va.gov (VA email only)
+
+### Next Steps
+- [ ] Review results for clinical relevance
+- [ ] Share findings with laboratory management
+- [ ] Schedule regular analysis runs
+- [ ] Request PowerBI template for ongoing use
+- [ ] Consider facility-specific customizations
+
+---
+
+💡 **Pro Tip:** Start with Query Mode for initial testing, then deploy as Stored Procedure for production PowerBI integration.
+
+🔒 **Security Note:** This tool processes PHI data. Ensure compliance with your facility's data handling policies.
 DECLARE @FacilityStationNumber VARCHAR(10) = 'YOUR_STATION_NUMBER'  -- Replace with your facility's station number
 DECLARE @StartDate DATE = '2024-01-01'  -- Adjust start date as needed
 DECLARE @EndDate DATE = '2024-12-31'    -- Adjust end date as needed

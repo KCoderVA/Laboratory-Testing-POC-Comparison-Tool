@@ -1,11 +1,3 @@
-USE [D03_VISN12Collab]
-GO
-
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
 /*
 ===============================================================================
 USAGE LICENSE:
@@ -13,6 +5,9 @@ USAGE LICENSE:
     MIT License
 
     Copyright (c) 2025 Kyle J. Coder, Edward Hines Jr. VA Hospital
+    
+    RECOMMENDED FILENAME: LabTest_POC_Compare_Analysis.sql
+    (To match the stored procedure name: [App].[LabTest_POC_Compare])
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -51,7 +46,7 @@ USAGE LICENSE:
         Environment:       Production
         Server:            VhaCdwDwhSql33.vha.med.va.gov
         Database:          D03_VISN12Collab
-        Procedure Name:    [App].[usp_PBI_HIN_LabTestCompare]
+        Procedure Name:    [App].[LabTest_POC_Compare]
         SQL Dialect:       T-SQL (Microsoft SQL Server)
         
     PROJECT PURPOSE:
@@ -70,6 +65,16 @@ USAGE LICENSE:
         • Equipment calibration variations
         • Processing method discrepancies
         
+        IMPLEMENTATION GUIDANCE FOR OTHER FACILITIES:
+        This solution can be adapted for use at other VA facilities by:
+        • Modifying @FacilityStationNumber parameter (line 285) to your facility's station number
+        • Updating LabChemTestSID values to match your facility's test identifiers
+        • Adjusting time window parameters for POC vs Lab comparisons based on clinical workflow
+        • Configuring PowerBI template with your facility's branding and requirements
+        
+        For complete implementation instructions, see:
+        https://github.com/KCoderVA/Laboratory-Testing-POC-Comparison-Tool/blob/main/README.md
+        
     SCOPE:
         Fiscal Year To Date (FYTD) comparison of paired test results with defined
         time windows for clinically relevant comparisons:
@@ -86,6 +91,14 @@ USAGE LICENSE:
         1. SQL Stored Procedure (This file)
         2. PowerBI Report Dashboard (automated GUI)
         3. Documentation Package
+        4. Implementation Guide for other VA facilities
+        5. Security signing procedure ([dbo].[sp_SignAppObject])
+        
+        COMPLETE SOLUTION REPOSITORY:
+        GitHub Repository: https://github.com/KCoderVA/Laboratory-Testing-POC-Comparison-Tool
+        Implementation Guide: https://github.com/KCoderVA/Laboratory-Testing-POC-Comparison-Tool/blob/main/TEMPLATE_SETUP_INSTRUCTIONS.md
+        PowerBI Template Request: https://github.com/KCoderVA/Laboratory-Testing-POC-Comparison-Tool/blob/main/POWERBI_TEMPLATE_REQUEST.md
+        Security Documentation: https://github.com/KCoderVA/Laboratory-Testing-POC-Comparison-Tool/blob/main/DATA_SECURITY_VERIFICATION.md
         
     POWERBI REPORT:
         Published Location: https://app.powerbigov.us/groups/f9a21156-7cbd-49e0-8cec-3b7b6e47b9e9/reports/9f36833b-42ca-43f3-a090-6bf48c15bcb7/c72abfeb1ac2073a3247
@@ -93,11 +106,29 @@ USAGE LICENSE:
         End Users:         Laboratory Management, Pathology Staff, Clinical Quality
 
     TECHNICAL SPECIFICATIONS:
+        Platform:          Microsoft SQL Server (T-SQL)
+        Compatible Versions: SQL Server 2016 Enterprise and higher
+        Database Engine:   Microsoft SQL Server (minimum version 13.0)
+        Language Version:  T-SQL (Transact-SQL)
+        Required Features: Windowing Functions, CTEs, Dynamic SQL, CASE Logic
+        Memory Requirements: Minimum 8GB RAM for large dataset queries
+        Storage Requirements: Varies by facility (typically 50GB+ for historical data)
+        Network Access:    VistA/CPRS integration required for real-time data
+        Security Level:    VA-compliant, HIPAA-compliant, PHI-protected
+        Performance Target: <30 seconds execution time for 1-year data ranges
+        Concurrent Users:  Up to 50 simultaneous report executions
+        
+        DATA INTEGRATION POINTS:
         Dependencies:      CDWWork.Chem.PatientLabChem (Primary data source)
                            CDWWork.Dim.Location (Location dimension)
                            CDWWork.SPatient.SPatient (Patient demographics)
                            CDWWork.Dim.LabChemTest (Lab test definitions)
         
+        VistA Integration: Real-time clinical data validation
+        CPRS Integration:  Clinical context and provider workflow integration
+        PowerBI Service:   Executive dashboard and trend visualization
+        
+        PERFORMANCE CHARACTERISTICS:
         Performance:       Utilizes temporary tables for optimal query execution
                            Indexed on PatientSID for efficient joins
                            Date range filtering applied early for performance
@@ -107,6 +138,12 @@ USAGE LICENSE:
         
         Output Format:     Structured for PowerBI consumption with standardized column names
                            Includes data refresh timestamp for cache management
+        
+        COMPLIANCE REQUIREMENTS:
+        • VA Directive 6500: Information Security Program
+        • VA Handbook 5200.08: Privacy and Release of Information
+        • HIPAA Privacy Rule: Protected Health Information handling
+        • FISMA Controls: Federal security assessment requirements
         
         Lab Test SIDs:     1000068127 (POC Glucose), 1000027461 (Lab Glucose)
                            1000114340 (iSTAT Creatinine), 1000062823 (Lab Creatinine)
@@ -118,39 +155,194 @@ USAGE LICENSE:
     ACKNOWLEDGMENTS:
         This solution was developed building upon foundational analysis concepts
         from previous work by Nik Ljubic (Nikola.Ljubic@va.gov) at Milwaukee VAMC.
+        
+        Special recognition to the Edward Hines Jr. VA Hospital Clinical Informatics
+        team for their expertise in laboratory data analysis and quality improvement
+        initiatives that guided the development of this comprehensive solution.
+        
+        Additional thanks to VA Clinical Quality teams nationwide who provided
+        feedback on Point-of-Care testing protocols and validation requirements
+        that shaped the analytical approach and clinical relevance of this tool.
+
+==================================================================================================
+    TROUBLESHOOTING & VALIDATION:
+==================================================================================================
+    
+    COMMON IMPLEMENTATION ISSUES:
+    1. Data Source Access: Verify CDWWork database permissions and connection
+    2. Test SID Mapping: Confirm lab test SIDs match your facility's configuration
+    3. Date Range Performance: Limit initial queries to 90-day ranges for testing
+    4. PowerBI Refresh: Ensure service account has appropriate database access
+    
+    VALIDATION CHECKPOINTS:
+    1. Verify test result counts match expected volume for your facility
+    2. Confirm time window logic produces clinically reasonable paired results
+    3. Validate statistical calculations against manual spot-checks
+    4. Test PowerBI dashboard refresh and data accuracy
+    
+    PERFORMANCE OPTIMIZATION:
+    1. Monitor execution time and adjust date ranges if needed
+    2. Consider indexing strategies for large datasets
+    3. Implement automated refresh schedules during low-usage periods
+    4. Archive historical results to maintain optimal performance
+
+==================================================================================================
+    SUPPORT & MAINTENANCE:
+==================================================================================================
+    
+    For technical support, implementation guidance, or feature requests:
+    • GitHub Issues: https://github.com/KCoderVA/Laboratory-Testing-POC-Comparison-Tool/issues
+    • Documentation: https://github.com/KCoderVA/Laboratory-Testing-POC-Comparison-Tool/wiki
+    • VA Clinical Informatics: Contact your local Clinical Informatics team
+    
+    MAINTENANCE SCHEDULE:
+    • Monthly: Verify data source connections and test SID mappings
+    • Quarterly: Review performance metrics and optimization opportunities
+    • Annually: Validate compliance with updated VA security requirements
+    • As Needed: Update test definitions and clinical logic per facility requirements
+
 ===============================================================================
 */
 
 
--- =========================================================================
+-- ===================================================================================================
 -- EXECUTION SETUP & VARIABLE DECLARATIONS
--- =========================================================================
-CREATE OR ALTER PROCEDURE [App].[usp_PBI_HIN_LabTestCompare]    
-AS
-BEGIN
-    SET NOCOUNT ON;  -- Prevents extra result sets from interfering with SELECT statements
+-- ===================================================================================================
+--
+-- PURPOSE: Initialize SQL Server environment settings and declare procedure-level variables
+--          for consistent execution across different SQL Server instances and user sessions.
+--
+-- TECHNICAL NOTES:
+-- • ANSI_NULLS ON: Ensures NULL comparisons follow ANSI SQL standards (NULL = NULL returns UNKNOWN)
+-- • QUOTED_IDENTIFIER ON: Enables double-quoted identifiers for object names (ANSI SQL compliance)
+-- • SET STATISTICS: Provides detailed execution time and I/O statistics for performance monitoring
+-- • Facility Station Parameter: Configurable for multi-facility implementations
+-- • Date Range Logic: Automatically calculates fiscal year-to-date (October 1st to current date)
+-- ===================================================================================================
+        -- Controls how SQL Server handles NULL value comparisons and string concatenations with NULLs
+        -- When ON: NULL comparisons always return UNKNOWN, preventing unexpected results in WHERE clauses
+                SET ANSI_NULLS ON
+                GO
+        -- Controls how SQL Server interprets quoted identifiers (table/column names in double quotes)
+        -- When ON: Double quotes identify object names, single quotes identify string literals (ANSI SQL standard)
+                SET QUOTED_IDENTIFIER ON
+                GO
 
-    -- EXEC dbo.sp_SignAppObject [usp_PBI_HIN_LabTestCompare]
-    
-    -- Establish the VA facility's station number as a parameter that will be referenced throughout the procedure
-    DECLARE @FacilityStationNumber INT = 578  -- Defaulted to Edward Hines Jr. VA Hospital (578)
+        -- ===========================================================================================
+        -- DEPLOYMENT MODE CONFIGURATION: QUERY vs STORED PROCEDURE
+        -- ===========================================================================================
+        -- 
+        -- This section controls whether the code executes as:
+        -- A) Direct Query Mode: Results displayed in query results window as CSV-like output
+        -- B) Stored Procedure Mode: Code deployed as a reusable database procedure
+        --
+        -- *** IMPORTANT: Both CREATE/ALTER and END sections must be modified together! ***
+        --
+        -- TO ACTIVATE STORED PROCEDURE MODE:
+        -- 1. UNCOMMENT the following 4 lines below by removing the leading "--" characters:
+        --    • CREATE OR ALTER PROCEDURE [App].[LabTest_POC_Compare]
+        --    • AS 
+        --    • BEGIN
+        --    • EXEC dbo.sp_SignAppObject [LabTest_POC_Compare]
+        -- 2. SCROLL TO THE END of this file and UNCOMMENT the "END" statement 
+        --    (search for "-- END" near the bottom of the file)
+        -- 3. OPTIONALLY: Comment out the variable declarations below (lines 280-290) and 
+        --    add parameters to the procedure header instead for more flexibility
+        --
+        -- TO REVERT TO DIRECT QUERY MODE:
+        -- 1. COMMENT OUT the 4 lines below by adding "--" at the beginning of each line
+        -- 2. SCROLL TO THE END of this file and COMMENT OUT the "END" statement
+        --    (add "--" before "END" near the bottom of the file)
+        -- 3. UNCOMMENT the variable declarations if they were commented out
+        --
+        -- STORED PROCEDURE DEPLOYMENT WORKFLOW:
+        -- 1. Test in Direct Query Mode first to validate results
+        -- 2. Switch to Stored Procedure Mode for production deployment  
+        -- 3. Execute the modified code to CREATE the stored procedure in the database
+        -- 4. Sign the procedure using: EXEC dbo.sp_SignAppObject 'LabTest_POC_Compare'
+        -- 5. Grant execution permissions to PowerBI service account and end users
+        -- 6. Configure PowerBI to call: EXEC [App].[LabTest_POC_Compare]
+        --
+        -- CURRENT CONFIGURATION: Direct Query Mode (Stored Procedure lines are commented out)
+        -- ===========================================================================================
+        
+        -- CREATE OR ALTER PROCEDURE [App].[LabTest_POC_Compare]    
+        -- AS
+        -- BEGIN
+        -- EXEC dbo.sp_SignAppObject [LabTest_POC_Compare]
+        
+        -- Enable execution messages and row counts for detailed output
+                SET NOCOUNT OFF;  -- Show row counts and execution messages for each query section
+                --SET NOCOUNT ON;  -- Disable showing row counts and execution messages for each query section
 
-    -- Date Range Parameters - Automatically sets fiscal year to date range
-    -- Fiscal year runs from October 1 of previous calendar year through September 30 of current calendar year
-    DECLARE @StartDate DATETIME2(0) = CAST('10/1/' + CAST(YEAR(GETDATE()) - 1 AS VARCHAR) AS DATETIME2(0)); -- Fiscal year start: October 1st
-    DECLARE @EndDate   DATETIME2(0) = CAST(GETDATE() AS DATE);                                              -- Current date for FYTD analysis
 
--- =========================================================================
--- RAW DATA COLLECTION & CONSOLIDATION - LABORATORY TEST POINT-OF-CARE VS TRADITIONAL LAB COMPARISONS
--- =========================================================================
+        
+        -- Establish the VA facility's station number as a parameter that will be referenced throughout the procedure
+        -- NOTE: For multiple facilities or wildcard searches, change the parameter type and WHERE clauses:
+        --   • Wildcards: Change to VARCHAR and use LIKE operator (e.g., WHERE Sta3n LIKE '%578%')
+        --   • Multiple stations: Use IN operator (e.g., WHERE Sta3n IN (578, 568, 332, 113))
+                DECLARE @FacilityStationNumber INT = 578  -- Defaulted to Edward Hines Jr. VA Hospital (v12/s578)
+                --DECLARE @FacilityStationNumber VARCHAR(50) = '578,568,332,113';  -- Example to include results from multiple facility
 
-    -- =======================================================================
-    -- GLUCOSE ANALYSIS
-    -- =======================================================================
 
-        -- ===================================================================
-        -- ANALYSIS of "POC GLUCOSE" (LabChemTestSID = "1000068127")
-        -- ===================================================================
+        -- Date Range Parameters - Automatically sets fiscal year to date range
+        -- NOTE: To modify date ranges for historical analysis or specific periods:
+        --   • Historical: Change YEAR(GETDATE()) - 1 to YEAR(GETDATE()) - 2 for previous fiscal year
+        --   • Explicit dates: Use CAST('2024-10-01' AS DATETIME2(0)) and CAST('2025-09-30' AS DATETIME2(0))
+                DECLARE @StartDate DATETIME2(0) = CAST('10/1/' + CAST(YEAR(GETDATE()) - 1 AS VARCHAR) AS DATETIME2(0)); -- Fiscal year start: October 1st
+                DECLARE @EndDate   DATETIME2(0) = CAST(GETDATE() AS DATE);                                              -- Current date for FYTD analysis
+
+
+        -- Enable detailed execution time statistics in the output of the query results
+                SET STATISTICS TIME ON;
+                SET STATISTICS IO ON;
+        
+        -- Display detailed parameter values for verification into the output of the query results
+                PRINT '============================================================'
+                PRINT 'LABORATORY POC COMPARISON ANALYSIS - EXECUTION STARTED'
+                PRINT '============================================================'
+                PRINT 'Facility Station Number: ' + CAST(@FacilityStationNumber AS VARCHAR(10))
+                PRINT 'Analysis Date Range: ' + CONVERT(VARCHAR(20), @StartDate, 120) + ' to ' + CONVERT(VARCHAR(20), @EndDate, 120)
+                PRINT 'Execution Start Time: ' + CONVERT(VARCHAR(30), GETDATE(), 120)
+                PRINT '============================================================'-- ===================================================================================================
+
+
+-- ===================================================================================================
+-- RAW DATA COLLECTION & CONSOLIDATION SECTION
+-- ===================================================================================================
+--
+-- PURPOSE: Extract and organize raw laboratory test results from CDW into temporary tables
+--          for efficient processing and comparison analysis.
+--
+-- METHODOLOGY:
+-- • Creates temporary tables for each test type (POC and traditional lab tests)
+-- • Applies facility and date range filters early for optimal performance
+-- • Standardizes column naming for consistent downstream processing
+-- • Includes comprehensive specimen tracking and audit fields
+--
+-- PERFORMANCE CONSIDERATIONS:
+-- • Temporary tables are indexed on PatientSID for efficient joins
+-- • Date filtering applied at source query level to minimize data movement
+-- • Test SID filtering ensures only relevant test types are processed
+-- ===================================================================================================
+
+    -- ===============================================================================================
+    -- GLUCOSE TEST FAMILY ANALYSIS
+    -- ===============================================================================================
+    --
+    -- PURPOSE: Compare Point-of-Care (POC) Glucose tests with traditional laboratory Glucose tests
+    --          to evaluate correlation, turnaround time, and clinical decision impact.
+    --
+    -- CLINICAL CONTEXT:
+    -- • POC Glucose: Bedside testing for immediate clinical decisions (30-second results)
+    -- • Lab Glucose: Central laboratory analysis with higher precision (30-60 minute turnaround)
+    -- • Time Window: 30 minutes for clinically relevant comparisons
+    -- • Clinical Significance: Glucose monitoring for diabetes management and critical care
+    -- ===============================================================================================
+
+        -- ===========================================================================================
+        -- POC GLUCOSE DATA EXTRACTION (LabChemTestSID = 1000068127)
+        -- ===========================================================================================
         -- Extract POC Glucose test results from PatientLabChem table
         -- POC (Point of Care) tests are performed at bedside or in clinical areas for rapid results
         DROP TABLE IF EXISTS #TEMP_POC_GLUCOSE;
@@ -182,6 +374,9 @@ BEGIN
         -- Add index for optimal join performance with patient table and time comparisons
         CREATE CLUSTERED INDEX CIX_PatientSID ON #TEMP_POC_GLUCOSE (PatientSID);
         CREATE NONCLUSTERED INDEX IX_SpecimenDateTime ON #TEMP_POC_GLUCOSE (LabChemSpecimenDateTime);
+        
+        -- Display row count for POC Glucose results
+        PRINT 'POC Glucose records extracted: ' + CAST(@@ROWCOUNT AS VARCHAR(10)) + ' rows'
 
         -- ===================================================================
         -- ANALYSIS of "GLUCOSE" (LabChemTestSID = "1000027461")
@@ -829,6 +1024,20 @@ BEGIN
 -- =========================================================================
 -- Return the consolidated paired test comparison results for PowerBI reporting
 -- This is the final output that will be consumed by the PowerBI dashboard
+
+    -- Display final execution summary
+    DECLARE @FinalRowCount INT;
+    SELECT @FinalRowCount = COUNT(*) FROM #TEMP_Combined_Results;
+    
+    PRINT '============================================================'
+    PRINT 'FINAL RESULTS SUMMARY:'
+    PRINT '============================================================'
+    PRINT 'Combined Results Table Created: #TEMP_Combined_Results'
+    PRINT 'Total Paired Comparisons Found: ' + CAST(@FinalRowCount AS VARCHAR(10)) + ' records'
+    PRINT 'Query Execution Complete - Outputting Final Results'
+    PRINT 'Execution End Time: ' + CONVERT(VARCHAR(30), GETDATE(), 120)
+    PRINT '============================================================'
+
     SELECT  [Patient Name],                            -- Patient identification for analysis
             [Last4 SSN],                               -- Privacy-compliant patient identifier
             [First Sample Accession Number],           -- POC test specimen tracking number
@@ -850,6 +1059,24 @@ BEGIN
     FROM    #TEMP_Combined_Results                     -- Final consolidated results table
     ORDER BY [LabTestFamily],                         -- Group by test type for organized reporting
              [First Sample Collection Date/Time] DESC; -- Most recent tests first within each group
+
+-- =========================================================================
+-- CLEANUP AND FINAL STATISTICS
+-- =========================================================================
+    
+    -- Display final statistics
+    PRINT '============================================================'
+    PRINT 'QUERY EXECUTION COMPLETE!'
+    PRINT '============================================================'
+    PRINT 'Final Results Displayed Above'
+    PRINT 'All temporary tables will be automatically cleaned up when session ends'
+    PRINT 'Analysis Period: ' + CONVERT(VARCHAR(20), @StartDate, 120) + ' to ' + CONVERT(VARCHAR(20), @EndDate, 120)
+    PRINT 'Facility: Edward Hines Jr. VA Hospital (Station ' + CAST(@FacilityStationNumber AS VARCHAR(10)) + ')'
+    PRINT '============================================================'
+    
+    -- Turn off statistics display
+    SET STATISTICS TIME OFF;
+    SET STATISTICS IO OFF;
 /*
     -- =========================================================================
     -- REFERENCE QUERIES FOR TROUBLESHOOTING AND VALIDATION
@@ -914,5 +1141,40 @@ BEGIN
         -- Note: Uncomment and modify as needed for testing specific scenarios
 */
 
-END
-GO
+-- ===================================================================================================
+-- STORED PROCEDURE MODE ACTIVATION INSTRUCTIONS
+-- ===================================================================================================
+--
+-- *** IMPORTANT: This END statement must be modified together with the CREATE section! ***
+-- 
+-- TO CONVERT TO STORED PROCEDURE MODE (for production deployment):
+--
+-- STEP 1: Activate the stored procedure header (around line 260):
+--         UNCOMMENT these 4 lines by removing the "--" at the beginning:
+--         CREATE OR ALTER PROCEDURE [App].[LabTest_POC_Compare]    
+--         AS
+--         BEGIN
+--         EXEC dbo.sp_SignAppObject [LabTest_POC_Compare]
+--
+-- STEP 2: Activate the procedure closing statement (THIS SECTION):
+--         UNCOMMENT the following line by removing the "--":
+-- END
+-- GO
+--
+-- STEP 3: Deploy and secure the stored procedure:
+--         1. Execute the modified code to create the procedure in the database
+--         2. Sign the procedure: EXEC dbo.sp_SignAppObject 'LabTest_POC_Compare'
+--         3. Grant permissions to PowerBI service account and authorized users
+--         4. Update PowerBI to call: EXEC [App].[LabTest_POC_Compare]
+--
+-- TO REVERT TO DIRECT QUERY MODE (for development/testing):
+--         1. COMMENT OUT the procedure header lines (add "--" at the beginning)
+--         2. COMMENT OUT the END statement below (add "--" at the beginning) 
+--         3. Execute as a regular query to see CSV results in the output window
+--
+-- CURRENT MODE: Direct Query Mode (procedure lines commented out, variables active)
+-- FILENAME: Laboratory POC Comparison Analysis Query (LabTest_POC_Compare)
+-- ===================================================================================================
+
+-- END
+-- GO

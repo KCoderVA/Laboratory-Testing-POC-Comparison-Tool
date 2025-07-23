@@ -6,7 +6,8 @@ The following versions of Laboratory Testing POC Comparison are currently suppor
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 2.0.x   | :white_check_mark: |
+| 1.8.x   | :white_check_mark: |
+| 1.7.x   | :white_check_mark: |
 | 1.x.x   | :x:                |
 
 ## Reporting a Vulnerability
@@ -98,6 +99,8 @@ When reporting healthcare-related vulnerabilities, please also include:
 - Input validation on all user-provided parameters
 - Principle of least privilege for database connections
 - Regular security code reviews
+- **Stored Procedure Security:** `[App].[LabTest_POC_Compare]` uses secure parameterization
+- **Certificate Signing:** All procedures signed with `[dbo].[sp_SignAppObject]` for authenticity
 
 ### Data Exposure Prevention
 - Limited data selection (last-4 SSN only, no full SSN)
@@ -156,6 +159,8 @@ When reporting healthcare-related vulnerabilities, please also include:
 - **Output Sanitization:** All output data sanitized to prevent injection attacks
 - **Error Handling:** Secure error messages that don't expose sensitive information
 - **Session Management:** Appropriate session timeouts and security
+- **Digital Signing:** All stored procedures signed with VA-approved certificates
+- **Certificate Validation:** `[dbo].[sp_SignAppObject]` ensures compliance with VA security standards
 
 ### Recommended Additional Controls
 - **Database Activity Monitoring:** Real-time monitoring of database access

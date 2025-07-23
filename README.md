@@ -1,7 +1,7 @@
 # Laboratory Testing POC Comparison Tool
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![SQL Server](https://img.shields.io/badge/SQL%20Server-2016+-blue.svg)](https://www.microsoft.com/en-us/sql-server)
+[![SQL Server](https://img.shields.io/badge/SQL%20Server-2016+-blue.svg)](https://www.microsoft.com/sql-server)
 [![PowerBI](https://img.shields.io/badge/PowerBI-Available%20by%20Request-orange.svg)](mailto:Kyle.Coder@va.gov)
 
 > **📧 PowerBI Template Available by Request Only**  
@@ -19,45 +19,90 @@ A comprehensive SQL Server solution for comparing Point-of-Care (POC) laboratory
 
 ## 🚀 Quick Start
 
-### Prerequisites
-- SQL Server 2016+ or Azure SQL Database with VA data access
-- VA network access and appropriate database permissions
-- PowerBI Desktop (for dashboard visualization after SQL setup)
-- Healthcare data warehouse with laboratory test data
-- Administrative access to create stored procedures on your facility's database
+### Prerequisites (COMPLETE IN ORDER)
+
+**🔐 Pre-requisite #1: NDS Operational Access**
+- Gain "NDS Operational Access" to view PHI/Real SSN Access data sources
+- Follow instructions at: https://vaww.vhadataportal.med.va.gov/Data-Access/Operations-Access
+- ⚠️ **Note:** This link is only accessible on a secure VA network
+
+**💻 Pre-requisite #2: SQL Software Interface**
+Install and configure SQL software on your local machine:
+- **Option A - VS Code:** Download from https://code.visualstudio.com/download
+- **Option B - SQL Server Management Studio (SSMS):**
+  - Submit OIT ticket via https://yourit.va.gov
+  - Open VA Software Center: `softwarecenter:SoftwareID=ScopeId_16785680-02FE-4B9B-B358-62C5C20205D4/Application_a72f3f2b-d050-4637-9e32-8091ecda9e61`
+
+**🔗 Pre-requisite #3: Database Connection**
+- Use VS Code or SSMS to connect to CDW's Database Engine
+- **Server Name:** `VhaCdwDwhSql33.vha.med.va.gov`
+- **Authentication:** Use your VA-issued access credentials
+
+**📊 Optional Pre-requisite #4: Database Write Access** *(Not required for basic query execution)*
+- Gain read & write access to your facility's database on SQL33 server
+- Contact your team's CDW owner (directory: https://dvagov.sharepoint.com/sites/OITBISL/SitePages/CDW-Site-Directory.aspx)
+- Required only for stored procedure deployment and PowerBI online integration
 
 ### Implementation Steps
-1. **Download Project Files** from GitHub repository
-2. **Deploy SQL Solution** using the provided stored procedure files
-3. **Configure Facility Parameters** in the SQL code for your station
-4. **Request PowerBI Template** from project author via VA email
-5. **Connect PowerBI** to your newly created stored procedure
 
-### Basic Setup
-1. **Download the SQL files** from this GitHub repository:
-   ```
-   - Laboratory POC Comparison (updated July 2025).sql (Main procedure)
-   - Individual test family queries in Other Documents/
-   - CDW Lab Test Names.sql (for finding your test SIDs)
-   ```
+**📥 Step #1: Download SQL Files**
+Download the main SQL file from this repository:
+```
+File: LabTest_POC_Compare_Analysis.sql
+```
 
-2. **Deploy to your VA database** with appropriate permissions:
-   ```sql
-   -- Execute the main stored procedure script on your facility's database
-   -- File: "Laboratory POC Comparison (updated July 2025).sql"
-   ```
+**🔧 Step #2: Open and Configure**
+1. Open the SQL file with your configured VS Code or SSMS software
+2. Modify the `@FacilityStationNumber` on line #285 to match your facility
+3. Update LabChemTestSID values if needed for your facility's test identifiers
 
-3. **Configure your facility parameters** in the SQL code:
-   ```sql
-   DECLARE @FacilityStationNumber INT = 578;  -- CHANGE THIS: Your facility number
-   ```
+**▶️ Step #3: Execute Query**
+Run the query in your SQL software interface (VS Code or SSMS):
+- **Default Output:** CSV-like table results in query results window
+- **PowerBI Integration:** Import query directly via DirectQuery (https://learn.microsoft.com/en-us/power-bi/connect-data/desktop-use-directquery)
 
-4. **Request PowerBI template** from the author:
-   - **Contact**: Kyle.Coder@va.gov (VA-to-VA email only)
-   - **Include**: Your facility name, station number, and intended use
-   - **Receive**: Clean PowerBI template file via secure VA channels
+**🔧 Optional Step #4: Deploy as Stored Procedure**
+Convert to database stored procedure for live PowerBI connection:
+1. Follow instructions in SQL file to uncomment stored procedure lines
+2. Deploy `[App].[LabTest_POC_Compare]` to your facility's database
+3. Use `[dbo].[sp_SignAppObject]` for VA security compliance
+4. See [TECHNICAL_GUIDE.md](docs/TECHNICAL_GUIDE.md) for detailed deployment instructions
 
-5. **Connect PowerBI to your stored procedure** and refresh data
+**📊 Optional Step #5: PowerBI Template**
+VA employees can request the PowerBI template (.pbix file):
+- Email Kyle.Coder@va.gov from your VA email address
+- Include your facility information and deployment confirmation
+- Template provides user-friendly sorting and visualization of query results
+
+### Basic File Structure
+
+📁 **Project Files:**
+```
+├── LabTest_POC_Compare_Analysis.sql          # Main analysis query/procedure
+├── [dbo].[sp_SignAppObject].sql             # VA security signing procedure
+├── docs/
+│   ├── QUICK_START.md                       # Simplified setup guide
+│   ├── TECHNICAL_GUIDE.md                   # Detailed technical documentation
+│   ├── CLINICAL_USER_GUIDE.md               # Clinical workflow guidance
+│   └── DATA_SECURITY_VERIFICATION.md        # Security compliance documentation
+├── Other Documents/
+│   ├── CDW Lab Test Names.sql               # Helper to find your facility's test SIDs
+│   ├── Individual test comparison scripts    # Separate queries for each test family
+│   └── Source documentation files
+└── Published Version/
+    └── Laboratory POC Comparison (combined).sql  # Legacy combined version
+```
+
+🔧 **Configuration Variables:**
+```sql
+DECLARE @FacilityStationNumber INT = 578;  -- CHANGE THIS: Your facility number
+DECLARE @StartDate DATETIME2(0) = [Auto-calculated fiscal year start]
+DECLARE @EndDate DATETIME2(0) = [Current date]
+```
+
+📊 **Output Modes:**
+- **Query Mode:** CSV-like results in SQL client (default)
+- **Stored Procedure Mode:** `[App].[LabTest_POC_Compare]` for PowerBI integration
 
 ## 📊 Features
 
@@ -399,7 +444,7 @@ SOFTWARE.
 **Project Initiated:** February 10, 2025  
 **Project Completed:** March 21, 2025  
 **Last Updated:** July 22, 2025  
-**Version:** 2.0 (Production Release)
+**Version:** 1.8.0 (Production Release)
 
 **GitHub Repository:** Ready for immediate publication  
 **Documentation Status:** Complete and comprehensive  
