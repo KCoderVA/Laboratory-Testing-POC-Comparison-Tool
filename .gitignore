@@ -129,6 +129,10 @@ $RECYCLE.BIN/
 *_draft.*
 *_wip.*
 
+# Sensitive documentation (never public)
+docs/ignored_docs/
+**/docs/ignored_docs/**
+
 # =============================================================================
 # PROJECT-SPECIFIC EXCLUSIONS
 # =============================================================================
