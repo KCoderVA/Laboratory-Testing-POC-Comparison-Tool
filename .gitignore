@@ -44,6 +44,12 @@ xArchive*
 ~$*
 
 # =============================================================================
+# DEVELOPER-SPECIFIC FILES (Not for Public Repository)
+# =============================================================================
+# Copilot instructions and development guidance
+.copilot-instructions.md
+
+# =============================================================================
 # POWERBI FILES (Security - Template Available by VA Request Only)
 # =============================================================================
 # PowerBI files contain potential sensitive/cached data

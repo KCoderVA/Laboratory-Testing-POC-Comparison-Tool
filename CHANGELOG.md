@@ -41,7 +41,7 @@ This release represents a comprehensive overhaul of the entire documentation eco
   - Rollback procedures for deployment flexibility
 
 - **📋 Professional Project Structure**
-  - Recommended file naming convention: `LabTest_POC_Compare_Analysis.sql`
+  - Standardized main file naming: `[App].[LabTest_POC_Compare].sql`
   - Standardized procedure naming: `[App].[LabTest_POC_Compare]`
   - Cross-reference consistency across all documentation files
   - Professional GitHub repository description and metadata

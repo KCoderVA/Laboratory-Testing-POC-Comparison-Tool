@@ -39,12 +39,12 @@ This guide provides the fastest path to deploy and run the Laboratory POC Compar
 ### 🔽 Step 1: Download Files
 Download the main analysis file:
 ```
-📄 LabTest_POC_Compare_Analysis.sql
+📄 [App].[LabTest_POC_Compare].sql
 📄 [dbo].[sp_SignAppObject].sql (for stored procedure mode)
 ```
 
 ### 🔧 Step 2: Configure Facility Settings
-Open `LabTest_POC_Compare_Analysis.sql` and modify line 285:
+Open `[App].[LabTest_POC_Compare].sql` and modify line 285:
 
 ```sql
 -- CHANGE THIS LINE TO YOUR FACILITY:
@@ -334,7 +334,7 @@ Try the specialized queries for specific test families:
 ## Quick Reference
 
 ### Key Files
-- **Main Query:** `Laboratory POC Comparison (updated July 2025).sql`
+- **Main Query:** `[App].[LabTest_POC_Compare].sql`
 - **PowerBI Dashboard:** `Laboratory Testing POC Comparison.pbix`
 - **Documentation:** `README.md`, `PROJECT_ANALYSIS_AND_RECOMMENDATIONS.md`
 

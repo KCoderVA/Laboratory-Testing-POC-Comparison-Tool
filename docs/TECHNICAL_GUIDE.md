@@ -134,7 +134,7 @@ ALTER DATABASE [LabPOCAnalysis] SET READ_COMMITTED_SNAPSHOT ON
 ### Step 3: Deploy SQL Objects
 ```sql
 -- Deploy main stored procedure
--- Execute: Laboratory POC Comparison (updated July 2025).sql
+-- Execute: [App].[LabTest_POC_Compare].sql
 
 -- Deploy individual test procedures
 -- Execute each: LabPOC_Compare_[TestType](July2025).sql
@@ -167,7 +167,7 @@ The Laboratory POC Comparison tool can operate in two modes:
 
 #### 1. Prepare the Main Analysis File
 ```sql
--- Open: LabTest_POC_Compare_Analysis.sql
+-- Open: [App].[LabTest_POC_Compare].sql
 -- Locate lines around 260 and UNCOMMENT the following:
 
 CREATE OR ALTER PROCEDURE [App].[LabTest_POC_Compare]    
@@ -197,7 +197,7 @@ WHERE issuer_name = 'Certificate for App account signing to CDWWork';
 
 #### 3. Execute Main Procedure Deployment
 ```sql
--- Execute the modified LabTest_POC_Compare_Analysis.sql file
+-- Execute the modified [App].[LabTest_POC_Compare].sql file
 -- This creates [App].[LabTest_POC_Compare] in your facility's database
 
 -- Verify creation:
@@ -315,7 +315,7 @@ SELECT name FROM sys.objects WHERE name = 'LabTest_POC_Compare';
 -- Test execution with small date range
 EXEC [App].[LabTest_POC_Compare]
 
--- For query mode testing, use the LabTest_POC_Compare_Analysis.sql file directly
+-- For query mode testing, use the [App].[LabTest_POC_Compare].sql file directly
 -- Verify performance
 SET STATISTICS IO ON
 SET STATISTICS TIME ON

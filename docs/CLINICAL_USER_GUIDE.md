@@ -59,7 +59,7 @@ The Laboratory Testing POC Comparison tool helps you:
 - Easy export of reports
 
 **SQL Queries (For Advanced Users):**
-- Direct access to detailed data using `LabTest_POC_Compare_Analysis.sql`
+- Direct access to detailed data using `[App].[LabTest_POC_Compare].sql`
 - Custom analysis capabilities
 - Real-time query execution
 - Detailed diagnostic information
