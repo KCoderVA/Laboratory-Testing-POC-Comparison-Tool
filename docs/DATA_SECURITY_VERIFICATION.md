@@ -1,4 +1,15 @@
+
 # Data Security Verification Checklist
+
+
+> **Reference Standard:** All security verification and checklist items in this document are based on the workflow, logic, and standards defined in `[App].[LabTest_POC_Compare].sql`. For any security review, validation, or public release, always reference this file as the authoritative source.
+
+---
+
+## **v1.9.0 Public Release**
+This data security verification checklist is current as of the v1.9.0 public release. No major feature updates are planned; only occasional data source maintenance or minor corrections will be made as needed. All security verification steps are standardized for open-source use.
+
+---
 
 ## ⚠️ **CRITICAL: Complete This Checklist Before Public Release**
 

@@ -1,4 +1,15 @@
+
 # User Guide for Clinical Staff
+
+
+> **Reference Standard:** All clinical workflow, result interpretation, and guidance in this project are based on the logic and standards defined in `[App].[LabTest_POC_Compare].sql`. For any clinical questions, troubleshooting, or enhancements, always reference this file as the authoritative source.
+
+---
+
+## **v1.9.0 Public Release**
+This clinical user guide is current as of the v1.9.0 public release. No major feature updates are planned; only occasional data source maintenance or minor corrections will be made as needed. All clinical documentation is standardized for open-source use.
+
+---
 
 This guide is specifically designed for clinical staff who will be using the Laboratory Testing POC Comparison project to improve laboratory quality assurance and patient care.
 

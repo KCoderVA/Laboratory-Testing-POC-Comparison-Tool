@@ -1,4 +1,3 @@
-# Laboratory Testing POC Comparison Tool
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![SQL Server](https://img.shields.io/badge/SQL%20Server-2016+-blue.svg)](https://www.microsoft.com/sql-server)
@@ -8,6 +7,13 @@
 > A comprehensive SQL Server solution for comparing Point-of-Care (POC) laboratory tests with traditional laboratory methods in healthcare settings, enabling systematic quality assurance and patient safety improvements.
 
 ## Overview
+
+---
+
+## **v1.9.0 Public Release**
+This repository is now published as version 1.9.0, representing the full and final public release of the Laboratory Testing POC Comparison Tool. No major feature updates are planned going forward; only occasional data source maintenance or minor corrections will be made as needed. All documentation and code are standardized for open-source community use.
+
+---
 
 This tool enables laboratory management to systematically identify and investigate discrepancies between paired POC and traditional laboratory test results. Originally developed at Edward Hines Jr. VA Hospital, it provides automated analysis across six major test families with clinical time-window based comparisons.
 
@@ -21,12 +27,12 @@ This tool enables laboratory management to systematically identify and investiga
 ## Key Features
 
 ### Core Test Family Comparisons
-- **Glucose** (POC vs Lab) - 30-minute comparison window
-- **Creatinine** (iSTAT vs Lab) - 24-hour comparison window  
-- **Hematocrit** (iSTAT vs Lab) - 30-minute comparison window
-- **Hemoglobin** (POC vs Lab) - 30-minute comparison window
-- **Troponin** (iSTAT vs High Sensitivity) - 30-minute comparison window
-- **Urinalysis** (POC vs Microscopic) - 30-minute comparison window
+- **Glucose** (Point-of-Collection vs Lab Drawn) - 30-minute comparison window
+- **Creatinine** (iSTAT vs Lab Drawn) - 24-hour comparison window
+- **Hematocrit** (iSTAT vs Lab Drawn) - 30-minute comparison window
+- **Hemoglobin** (POC vs Lab Drawn) - 30-minute comparison window
+- **Troponin** (iSTAT vs High-Sensitivity Lab Drawn) - 30-minute comparison window
+- **Urinalysis** (Point-of-Collection vs Lab Collected) - 30-minute comparison window
 
 ### Advanced Capabilities
 - **Statistical Analysis** - Automated discrepancy rate calculations and correlation patterns
@@ -47,9 +53,8 @@ This tool enables laboratory management to systematically identify and investiga
 👉 **[Follow the Complete Quick Start Guide](QUICK_START.md)** for step-by-step implementation instructions.
 
 ### PowerBI Template Access
-For security compliance, the PowerBI template is distributed through secure VA channels only:
+For security compliance, the PowerBI template is distributed through secure VA channels only (due to sensitive data embedded within .pbix file):
 - **VA Users**: Email Kyle.Coder@va.gov after deploying SQL components
-- **Requirements**: Valid VA email, facility information, deployment confirmation
 
 ## Repository Contents
 
@@ -126,10 +131,18 @@ See **[Contributing Guidelines](docs/CONTRIBUTING.md)** for detailed standards.
 **Institution:** Edward Hines Jr. VA Hospital (Station 578, VISN 12)
 
 **Contact:** Kyle.Coder@va.gov  
-**Version:** 1.8.0 (Production Release)  
-**Last Updated:** July 23, 2025
+**Version:** 1.9.0 (Public Release)  
+**Last Updated:** July 28, 2025
 
 ---
 
 **🏥 Ready to enhance laboratory quality assurance at your healthcare facility?**  
 **Start with the [Quick Start Guide](QUICK_START.md) for complete implementation instructions.**
+
+---
+## 🚩 Main Analysis File: `[App].[LabTest_POC_Compare].sql`
+
+> **This is the authoritative SQL file for all core logic, clinical rationale, and implementation standards.**
+> - All documentation, technical guides, and user instructions are based on this file.
+> - Always reference this file for the latest parameters, time windows, and clinical logic.
+> - For any new deployments, enhancements, or troubleshooting, start with `[App].[LabTest_POC_Compare].sql`.

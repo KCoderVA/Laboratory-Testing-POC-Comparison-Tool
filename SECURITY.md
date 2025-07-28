@@ -1,6 +1,15 @@
-# Security Policy
+
+
+> **Reference Standard:** All security and compliance practices in this repository are based on the workflow, logic, and standards defined in `[App].[LabTest_POC_Compare].sql`. For any security review, validation, or public release, always reference this file as the authoritative source.
 
 ## Supported Versions
+
+---
+
+## **v1.9.0 Public Release**
+This security policy is current as of the v1.9.0 public release. No major feature updates are planned; only occasional data source maintenance or minor corrections will be made as needed. Security practices and compliance are standardized for open-source use.
+
+---
 
 The following versions of Laboratory Testing POC Comparison are currently supported with security updates:
 

@@ -5,13 +5,41 @@ All notable changes to the Laboratory Testing POC Comparison project will be doc
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+
+## [1.9.0] - 2025-07-28
+
+### Major Public Release: GitHub Open Source Publication
+
+This release marks the first full public release of the Laboratory Testing POC Comparison project as version 1.9.0, published to GitHub for open source community adoption. All content has been standardized on `[App].[LabTest_POC_Compare].sql` as the main file and reference standard.
+
+#### Added
+- **Public GitHub repository publication**
+- **Comprehensive documentation standardization**: All markdown files and guides now reference `[App].[LabTest_POC_Compare].sql` as the authoritative source for all logic, workflow, and documentation.
+- **Detailed end-of-line comments**: `CDW Lab Test Names.sql` now includes detailed end-of-line comments for each functional line to educate and instruct future users.
+- **Non-functional documentation transfer**: All non-functional documentation, comments, and headers from `[App].[LabTest_POC_Compare].sql` have been applied to `CDW Lab Test Names.sql` without any functional changes.
+- **Professional project structure**: All documentation, guides, and instructions have been reviewed and updated for public release, ensuring cross-reference consistency and professional presentation.
+
+#### Changed
+- **Sensitive file removal**: All sensitive or internal-use-only files have been removed from the public repository to ensure compliance with privacy and security requirements.
+- **Documentation updates**: All markdown documentation files (README.md, QUICK_START.md, CHANGELOG.md, SECURITY.md, docs/CLINICAL_USER_GUIDE.md, docs/TECHNICAL_GUIDE.md, docs/DATA_SECURITY_VERIFICATION.md, docs/CONTRIBUTING.md) have been updated to reference `[App].[LabTest_POC_Compare].sql` as the standard and to reflect the current project structure and security posture.
+- **Repository consolidation**: All content has been reviewed and consolidated for public release, with archive and development files excluded from the public view.
+
+#### Fixed
+- **Cross-documentation consistency**: Resolved all inconsistent references to procedure and file names across documentation.
+- **Outdated references**: Fixed outdated file name references and deployment instruction inconsistencies in all technical guides.
+- **Security compliance**: Validated that only anonymized and non-sensitive content remains in the public repository.
+
+---
+
 ## [Unreleased]
 
-### Planned for v2.0.0 - Major Public Release
-- [ ] Public GitHub repository publication
-- [ ] Community contribution guidelines
-- [ ] Enhanced cross-facility portability
-- [ ] Automated testing framework
+### Planned for v2.0.0
+- Community contribution guidelines
+- Enhanced cross-facility portability
+- Automated testing framework
+- Additional PowerBI integration enhancements
+- Further documentation improvements based on community feedback
 
 ## [1.8.0] - 2025-07-23
 

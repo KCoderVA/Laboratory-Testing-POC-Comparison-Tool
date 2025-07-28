@@ -1,4 +1,15 @@
+
 # Contributing to Laboratory Testing POC Comparison
+
+
+> **Reference Standard:** All contribution guidelines, development standards, and documentation requirements in this project are based on the logic and standards defined in `[App].[LabTest_POC_Compare].sql`. For any new contributions, enhancements, or documentation updates, always reference this file as the authoritative source.
+
+---
+
+## **v1.9.0 Public Release**
+This contributing guide is current as of the v1.9.0 public release. No major feature updates are planned; only occasional data source maintenance or minor corrections will be made as needed. Community contributions are welcome for maintenance and minor improvements.
+
+---
 
 Thank you for your interest in contributing to the Laboratory Testing POC Comparison project! This project aims to improve laboratory quality assurance and patient safety across healthcare organizations worldwide.
 

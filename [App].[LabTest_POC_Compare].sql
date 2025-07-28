@@ -1,3 +1,4 @@
+
 /*
 ===============================================================================
 USAGE LICENSE:
@@ -5,7 +6,12 @@ USAGE LICENSE:
     MIT License
 
     Copyright (c) 2025 Kyle J. Coder, Edward Hines Jr. VA Hospital
-    
+
+    --------------------------------------------------------------------------
+    v1.9.0 PUBLIC RELEASE (2025-07-28)
+    This file is published as part of the full public release (v1.9.0) of the Laboratory Testing POC Comparison Tool. No major feature updates are planned; only occasional data source maintenance or minor corrections will be made as needed. All logic, workflow, and documentation are standardized for open-source use.
+    --------------------------------------------------------------------------
+
     RECOMMENDED FILENAME: LabTest_POC_Compare_Analysis.sql
     (To match the stored procedure name: [App].[LabTest_POC_Compare])
 

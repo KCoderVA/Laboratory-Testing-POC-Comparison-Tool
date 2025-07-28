@@ -1,17 +1,18 @@
-# Quick Start Guide - Laboratory POC Comparison Tool
 
 🚀 **Get up and running in 15 minutes!**
 
 This guide provides the fastest path to deploy and run the Laboratory POC Comparison analysis at your VA facility.
 
 ## Table of Contents
-- [Prerequisites Checklist](#prerequisites-checklist)
-- [Quick Setup (5 Steps)](#quick-setup-5-steps)
-- [First Execution](#first-execution)
-- [Optional: PowerBI Integration](#optional-powerbi-integration)
-- [Troubleshooting](#troubleshooting)
 
 ## Prerequisites Checklist
+
+---
+
+## **v1.9.0 Public Release**
+This Quick Start Guide is current as of the v1.9.0 public release. No major feature updates are planned; only occasional data source maintenance or minor corrections will be made as needed. Please refer to the main repository for the latest information.
+
+---
 
 ### ✅ Required VA Access (Must Complete First)
 
@@ -158,6 +159,14 @@ Procedure: EXEC [App].[LabTest_POC_Compare]
 - [ ] Review results for clinical relevance
 - [ ] Share findings with laboratory management
 - [ ] Schedule regular analysis runs
+
+---
+## 🚩 Main Analysis File: `[App].[LabTest_POC_Compare].sql`
+
+> **This is the authoritative SQL file for all core logic, clinical rationale, and implementation standards.**
+> - All documentation, technical guides, and user instructions are based on this file.
+> - Always reference this file for the latest parameters, time windows, and clinical logic.
+> - For any new deployments, enhancements, or troubleshooting, start with `[App].[LabTest_POC_Compare].sql`.
 - [ ] Request PowerBI template for ongoing use
 - [ ] Consider facility-specific customizations
 
