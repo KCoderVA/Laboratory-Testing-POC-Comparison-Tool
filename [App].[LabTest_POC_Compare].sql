@@ -106,17 +106,17 @@ USAGE LICENSE:
         End Users:         Laboratory Management, Pathology Staff, Clinical Quality
 
     TECHNICAL SPECIFICATIONS:
-        Platform:          Microsoft SQL Server (T-SQL)
-        Compatible Versions: SQL Server 2016 Enterprise and higher
-        Database Engine:   Microsoft SQL Server (minimum version 13.0)
-        Language Version:  T-SQL (Transact-SQL)
-        Required Features: Windowing Functions, CTEs, Dynamic SQL, CASE Logic
-        Memory Requirements: Minimum 8GB RAM for large dataset queries
-        Storage Requirements: Varies by facility (typically 50GB+ for historical data)
-        Network Access:    VistA/CPRS integration required for real-time data
-        Security Level:    VA-compliant, HIPAA-compliant, PHI-protected
-        Performance Target: <30 seconds execution time for 1-year data ranges
-        Concurrent Users:  Up to 50 simultaneous report executions
+        Platform:               Microsoft SQL Server (T-SQL)
+        Compatible Versions:    SQL Server 2016 Enterprise and higher
+        Database Engine:        Microsoft SQL Server (minimum version 13.0)
+        Language Version:       T-SQL (Transact-SQL)
+        Required Features:      Windowing Functions, CTEs, Dynamic SQL, CASE Logic
+        Memory Requirements:    Minimum 8GB RAM for large dataset queries
+        Storage Requirements:   Varies by facility (typically 50GB+ for historical data)
+        Network Access:         VistA/CPRS integration required for real-time data
+        Security Level:         VA-compliant, HIPAA-compliant, PHI-protected
+        Performance Target:     <30 seconds execution time for 1-year data ranges
+        Concurrent Users:       Up to 50 simultaneous report executions
         
         DATA INTEGRATION POINTS:
         Dependencies:      CDWWork.Chem.PatientLabChem (Primary data source)
